@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
 
-// add input for change that values
+// add input for change that variables
 const charAfterDot = 2
 const procentEveryYear = 0.04
 
