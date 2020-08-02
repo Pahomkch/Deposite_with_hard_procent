@@ -11,28 +11,46 @@
   justify-content: center;
 
 }
-.container > div {
-  /* background-color: red; */
-  /* padding: 50px; */
+/* .container > div {
   margin: 10px;
-}
+} */
 
 h1{
   text-align: center;
 }
-
-.variables {
-  text-align: right;
+.variables  {
+  display: flex;
+  flex: 0.3;
+  flex-direction: column;
+  align-items: center;
 }
+
+.longThermPlans {
+  flex: 0.3;
+}
+
 
 .willBe {
   /* padding: 0 20px; */
   text-align: right;
+  flex: 0.3
+}
+.cell {
+  text-align: center;
+  flex: 1;
 }
 
-.calculateEachMonth, .cell{
+input, textarea {
+  text-align: center;
+}
+textarea {
+  resize: none;
+  flex: 1;
+}
+
+.calculateEachMonth  {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
 }
 
 .calculateDeposite {
