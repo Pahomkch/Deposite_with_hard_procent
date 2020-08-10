@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import './App.css';
+import ProcentForDeposite from './ProcentForDeposite';
 
 // add input for change that variables
 const charAfterDot = 2
-const procentEveryYear = 0.1
+// const procentEveryYear = 0.04
 
 
 function App() {
-  
+//initial
+const [procentEveryYear, setProcentPerYear] = useState(0.04)
 // Calculate
   const calculateProcentIncomeForMonth = (depositCount) => {
     return +((depositCount * procentEveryYear) / 12).toFixed(charAfterDot)
@@ -59,17 +61,20 @@ function App() {
   const userDepositInfo = (
     <div className={'variables'}>
       <div className={'cell'}>
+        <ProcentForDeposite setProcent={setProcentPerYear} />
+      </div>
+      <div className={'cell'}>
         <div>Enter your deposit</div>
         <input value={deposite} onChange={depositIsChange}  type={'text'}  />
       </div>
 
       <div className={'cell'}>
-        <div>% in Month</div> 
+        <div>income % in Month</div> 
         <input value={monthIncome} id={'inComeNextMonth'}  placeholder={'month'}  type={'text'}  />
       </div>
 
       <div className={'cell'}>
-        <div>% in Year</div> 
+        <div>income % in Year</div> 
         <input value={yearIncome} id={'inComeNextYear'}  placeholder={'year'}  type={'text'}  />
       </div>
 
@@ -79,6 +84,7 @@ function App() {
                 id={'addEveryMonth'}
                 value={addEveryMonth} 
                 onChange={summAddEveryMonthIsChanged} />
+         <div>procentEveryYear = {procentEveryYear}</div> 
       </div>
     </div>)
 
@@ -106,7 +112,7 @@ function App() {
 
 
   return (
-    <div className={'App'}>
+    <div className={'App'} color="primary">
       <h1>Calculate your deposite</h1>
       <div className={'container'}>
         {userDepositInfo}
@@ -116,6 +122,7 @@ function App() {
         <div className={'longThermPlans'}>
           {willBeMoneyOnLongTherm}
         </div>
+       
       </div>
     </div>)
 }
