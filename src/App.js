@@ -1,32 +1,36 @@
 import React, { useState } from 'react';
 import './App.css';
 import ProcentForDeposite from './ProcentForDeposite';
+import { createMuiTheme } from '@material-ui/core/styles';
 
+import { TextField } from '@material-ui/core';
+import InputAdornment from '@material-ui/core/InputAdornment';
 
 
 const charAfterDot = 2
 
 export default function App() {
+
 //initial state
 const [procentEveryYear, setProcentPerYear] = useState(0.04)
 const [deposite, setDeposite] = useState(0)
-const [monthIncome, setMonthIncome] = useState(0) 
+const [monthIncome, setMonthIncome] = useState(0)  
 const [yearIncome, setYearIncome] = useState(0) 
 const [addEveryMonth, setAddEveryMoth] = useState(0) 
 
 // Calculate
-  const calculateProcentIncomeAfterMonth = (depositCount, monthlyPaid = 0) => {
-    return +((depositCount + monthlyPaid) * procentEveryYear / 12).toFixed(charAfterDot)
+  const calculateProcentIncomeAfterMonth = (procent = procentEveryYear, depositCount = deposite, monthlyPaid = addEveryMonth  ) => {
+    return +((depositCount + monthlyPaid) * procent / 12).toFixed(charAfterDot)
   }
 
-  const calculateProcentIncomeAfterYear = (depositCount, monthlyPaid = 0) => {
+  const calculateProcentIncomeAfterYear = (procent = procentEveryYear, depositCount = deposite, monthlyPaid = addEveryMonth) => {
     const depositSumm = calculateDepositeAfterSomeMonth(12, depositCount, addEveryMonth)
-    return calculateProcentIncomeAfterMonth(depositSumm[11]) 
+    return calculateProcentIncomeAfterMonth(procent, depositSumm[11], monthlyPaid,   ) 
   }
 
-  const calculateDepositeAfterSomeMonth = (countMonth, deposite, monthlyPaid = 0, procentOfYear = procentEveryYear) => {
+  const calculateDepositeAfterSomeMonth = (countMonth, depositeCount = deposite, monthlyPaid = addEveryMonth, procentOfYear = procentEveryYear) => {
     let depositeSumms = [];
-    let newDeposite = deposite;
+    let newDeposite = depositeCount;
     for (let i = 0; i < countMonth; i++) {
       newDeposite = (newDeposite + monthlyPaid) + newDeposite * procentOfYear / 12
       depositeSumms.push(newDeposite.toFixed(charAfterDot))
@@ -41,82 +45,115 @@ const [addEveryMonth, setAddEveryMoth] = useState(0)
       newDepositSize = 0
     }
     setDeposite(newDepositSize)
-    setMonthIncome(calculateProcentIncomeAfterMonth(newDepositSize, addEveryMonth))
-    setYearIncome(calculateProcentIncomeAfterYear(newDepositSize, addEveryMonth) )
+    setMonthIncome(calculateProcentIncomeAfterMonth(procentEveryYear, newDepositSize))
+    setYearIncome(calculateProcentIncomeAfterYear(procentEveryYear, newDepositSize) )
   }
 
   const summAddEveryMonthIsChanged = event => {
     const monthlyPaid = +event.target.value 
     setAddEveryMoth(monthlyPaid)
-    setMonthIncome(calculateProcentIncomeAfterMonth(deposite, monthlyPaid))
-    setYearIncome(calculateProcentIncomeAfterYear(deposite, monthlyPaid) )
+    setMonthIncome(calculateProcentIncomeAfterMonth(procentEveryYear, deposite, monthlyPaid))
+    setYearIncome(calculateProcentIncomeAfterYear(procentEveryYear, deposite, monthlyPaid) )
   }
 
 
   const userDepositInfo = (
-    <div className={'variables'}>
+    <form className={'variables'}>
       <div className={'cell'}>
-        <ProcentForDeposite  setProcent={setProcentPerYear} />
+        <ProcentForDeposite   procentEveryYear={procentEveryYear}
+                              setProcent={setProcentPerYear}
+                              setMonthIncome={setMonthIncome} 
+                              setYearIncome={setYearIncome}
+                              calculateProcentIncomeAfterMonth={calculateProcentIncomeAfterMonth} 
+                              calculateProcentIncomeAfterYear={calculateProcentIncomeAfterYear}
+                              deposite={deposite}
+                              addEveryMonth={addEveryMonth}
+         />
       </div>
       <div className={'cell'}>
-        <div>Enter your deposit</div>
-        <input value={deposite} onChange={depositIsChange}  type={'text'}  />
+        <TextField
+            value={deposite}
+            onChange={depositIsChange}
+            label="Your deposite now"
+            id="standard-start-adornment"
+            className={'cell'}
+            InputProps={{
+              startAdornment: <InputAdornment position="start">$</InputAdornment>,
+            }}
+          />
       </div>
 
       <div className={'cell'}>
-        <div>income % after Month</div> 
-        <input value={monthIncome} onChange={() => {console.log('Its proprepty calculate automatic')}} 
-                id={'inComeNextMonth'}  placeholder={'month'}  type={'text'}  />
+      <TextField
+            value={monthIncome}
+            onChange={() => {console.log('Its proprepty calculate automatic')}} 
+            label="% after a month"
+            id="procentAfterMonth"
+            color="secondary"
+            InputProps={{
+              startAdornment: <InputAdornment position="start">%</InputAdornment>,
+            }}
+          />
       </div>
 
       <div className={'cell'}>
-        <div>income % after Year</div> 
-        <input value={yearIncome} onChange={() => {console.log('Its proprepty calculate automatic')}}
-                id={'inComeNextYear'}  placeholder={'year'}  type={'text'}  />
+      <TextField
+            value={yearIncome}
+            onChange={() => {console.log('Its proprepty calculate automatic')}} 
+            label="% after a month"
+            id="procentAfterYear"
+            color="secondary"
+
+            InputProps={{
+              startAdornment: <InputAdornment position="start">%</InputAdornment>,
+            }}
+          />
+        
       </div>
 
       <div className={'cell'}>
-        <div>Add Monthly</div> 
-        <textarea placeholder={'Can add every month'} 
-                id={'addEveryMonth'}
-                value={addEveryMonth} 
-                onChange={summAddEveryMonthIsChanged} />
+        <TextField  label="Add every month"  
+                    placeholder={'Can add every month'} 
+                    value={addEveryMonth} 
+                    onChange={summAddEveryMonthIsChanged} 
+                    InputProps={{
+                      startAdornment: <InputAdornment position="start">%</InputAdornment>,
+                    }}
+          /> 
       </div>
-    </div>)
+    </form>)
 
-  // const willBeMoneyOnAYear = calculateDepositeSizeForSomeMonths(deposite, addEveryMonth, 12)
-  //                                   .map( (sum, index) => {
-  //                                     let showSum = +sum.toFixed(charAfterDot)
-  //                                     return (
-  //                                       <div className={'calculateEachMonth'}>
-  //                                         <p> After {index + 1} month:</p> 
-  //                                         <p className={'calculateDeposite'}>{showSum}</p>
-  //                                       </div>
-  //                                     )})  ;
+  const willBeMoneyOnAYear = calculateDepositeAfterSomeMonth(12, deposite, addEveryMonth)
+                                    .map( (sum, index) => {
+                                      return (
+                                        <div className={'calculateEachMonth'}>
+                                          <p> {index + 1} month -></p> 
+                                          <p className={'calculateDeposite'}>{sum}</p>
+                                        </div>
+                                      )})  ;
     
-  //   const willBeMoneyOnLongTherm = calculateDepositeSizeForSomeMonths(deposite, addEveryMonth, 240)
-  //                                     .map( (sum, index) => {
-  //                                       return (index === 59 || index === 119 || index === 179 || index === 239  ) ? 
-  //                                               <div className={'calculateEachMonth'}> 
-  //                                                 After {index=== 59 && '5 years'} 
-  //                                                         {index === 119 && '10 years'}
-  //                                                         {index === 179 && '15 years'}
-  //                                                         {index === 239 && '20 years'}
-  //                                                   <p className={'calculateDeposite'}>{sum}</p></div> 
-  //                                               : null 
-  //                                     })                                  
+    const willBeMoneyOnLongTherm = calculateDepositeAfterSomeMonth(300)
+                                        .map( (summa, index) => {
+                                            if (index === 59 || index === 119 || index === 179 || index === 239 || index === 299) {
+                                              return <div className={'calculateEachYear'}>
+                                                        <p> { (index + 1) / 12} years -></p> 
+                                                        <p className={'calculateDeposite'}>{summa}</p>
+                                                      </div> 
+                                            }
+                                            return null
+                                          })
 
 
   return (
     <div className={'App'} color="primary">
-      <h1>Calculate your deposite</h1>
+      <h1 className={'title'}>Calculate your deposite</h1>
       <div className={'container'}>
         {userDepositInfo}
         <div className={'willBe'}>
-          {/* {willBeMoneyOnAYear} */}
+          {willBeMoneyOnAYear}
         </div>
         <div className={'longThermPlans'}>
-          {/* {willBeMoneyOnLongTherm} */}
+          {willBeMoneyOnLongTherm}
         </div>
        
       </div>

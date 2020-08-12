@@ -1,5 +1,5 @@
 .App {
-  background-color: #282c34;
+  background-color: #2b2c3a;
   padding-top: 30px;
   min-height: 100vh;
   font-size: calc(10px + 2vmin);
@@ -15,7 +15,7 @@
   margin: 10px;
 }
 
-h1{
+.title {
   text-align: center;
 }
 .variables  {
@@ -29,26 +29,27 @@ h1{
   flex: 0.3;
 }
 
-
 .willBe {
-  /* padding: 0 20px; */
   text-align: right;
   flex: 0.3
 }
+
 .cell {
   text-align: center;
   flex: 1;
+  color: #fff;
 }
 
 input, textarea {
   text-align: center;
 }
+
 textarea {
   resize: none;
   flex: 1;
 }
 
-.calculateEachMonth  {
+.calculateEachMonth, .calculateEachYear  {
   display: flex;
   justify-content: center;
 }
