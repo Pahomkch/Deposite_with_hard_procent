@@ -7,21 +7,41 @@ const SET_MONTHLY_INCOME = 'APP/DEPOSITE_WITH_HARD_PROCENT/SET_MONTHLY_INCOME'
 
 
 const initial = {
-    procentEveryYear: 0.04,
+    procentEveryYear: 0.08,
     deposite: 101,
-    monthProfit: 0,
-    yearProfit: 0,
-    monthlyIncome: 0
+    monthProfit: 2,
+    yearProfit: 505,
+    monthlyIncome: 888
 }
 
 export default function reducer(state = initial, action) {
-    switch (action.type) {
-      case SET_DEPOSITE:
+  switch (action.type) {
+    case SET_DEPOSITE:
         return {
             ...state,
             deposite: action.payload
         }
-      default:
+    case SET_PROCENT_EVERY_YAER : 
+        return {
+            ...state,
+            procentEveryYear: action.payload
+        }
+    case SET_MONTHLY_PROFIT : 
+        return {
+            ...state,
+            monthProfit: action.payload
+        }
+    case SET_YEARLY_PROFIT : 
+        return {
+            ...state,
+            yearProfit: action.payload
+        }
+    case SET_MONTHLY_INCOME : 
+        return {
+            ...state,
+            monthlyIncome: action.payload
+        } 
+    default:
         return state
     }
   }

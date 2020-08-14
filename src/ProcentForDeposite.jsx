@@ -3,13 +3,15 @@ import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
 import style from './App'
 
-export default function ProcentForDeposite({setProcent, setMonthIncome, setYearIncome, calculateProcentIncomeAfterMonth,              calculateProcentIncomeAfterYear }) {
+export default function ProcentForDeposite({procentEveryYear, setProcentEveryYar}) {
 
   const updateCalculating = (e, value) => {
-    const newProcentValue = (value/100).toFixed(3)
-    setProcent(newProcentValue)
-    setMonthIncome(calculateProcentIncomeAfterMonth( newProcentValue ))
-    setYearIncome(calculateProcentIncomeAfterYear( newProcentValue ) )
+    setProcentEveryYar(value)
+    
+    // const newProcentValue = (value/100).toFixed(3)
+    // setProcent(newProcentValue)
+    // setMonthIncome(calculateProcentIncomeAfterMonth( newProcentValue ))
+    // setYearIncome(calculateProcentIncomeAfterYear( newProcentValue ) )
   }
 
   return (
@@ -18,13 +20,13 @@ export default function ProcentForDeposite({setProcent, setMonthIncome, setYearI
         Index your interest
       </Typography>
       <Slider
-        defaultValue={4}
+        defaultValue={procentEveryYear*100}
         aria-labelledby="discrete-slider"
         valueLabelDisplay="auto"
-        step={0.5}
+        step={1}
         marks
         min={3}
-        max={6}
+        max={15}
         onChange={updateCalculating } />
       
     </div>

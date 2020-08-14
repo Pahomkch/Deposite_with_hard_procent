@@ -1,10 +1,6 @@
 //******************   selectors   **************** 
 export const getDepositeValue = (state) => state.app.deposite
-
-
-
-// procentEveryYear: 0.04,
-//     deposite: 0,
-//     monthProfit: 0,
-//     yearProfit: 0,
-//     monthlyIncome: 0
+export const getProcentValue = (state) => state.app.procentEveryYear
+export const getMonthlyProfitValue = (state) => state.app.monthProfit
+export const getYearProfitValue = (state) => state.app.yearProfit
+export const getMonthlyIncomeValue = (state) => state.app.monthlyIncome
