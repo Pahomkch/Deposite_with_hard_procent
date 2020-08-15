@@ -3,52 +3,55 @@ import './App.css';
 import ProcentForDeposite from './ProcentForDeposite';
 import { TextField } from '@material-ui/core';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import { setDeposite, setProcentEveryYar,  setMonthlyProfit, setYearlyProfit, setMonthlyIncome } from './Redux/reducer';
+import { setDeposite, setProcentEveryYar, setMonthlyIncome } from './Redux/reducer';
 import { connect } from 'react-redux';
-import { getDepositeValue, getProcentValue, getMonthlyProfitValue, getYearProfitValue,getMonthlyIncomeValue } from './Redux/StateSelectors/selectors';
+import { getDepositeValue, getProcentValue, getMonthlyIncomeValue } from './Redux/StateSelectors/selectors';
+import { calculateProcentIncomeAfterMonth, calculateProcentIncomeAfterYear, calculateDepositeAfterSomeMonth } from './CalculateFn/calculate';
 
 
 const mapStateToProps = (state) => ({
   deposite: getDepositeValue(state),
   procentEveryYear: getProcentValue(state),
-  monthProfit: getMonthlyProfitValue(state),
-  yearProfit: getYearProfitValue(state),
   monthlyIncome: getMonthlyIncomeValue(state)
 })
-export default connect(mapStateToProps, {setDeposite, setProcentEveryYar, setMonthlyProfit, setYearlyProfit, setMonthlyIncome})(App)
+export default connect(mapStateToProps, {setDeposite, setProcentEveryYar, setMonthlyIncome})(App)
+
+
+
+
 
 function App(props) {
-  const {deposite, procentEveryYear, monthProfit, yearProfit, monthlyIncome, 
-    setDeposite, setProcentEveryYar, setMonthlyProfit, setYearlyProfit, setMonthlyIncome} = props
+  const {deposite, procentEveryYear, monthlyIncome,
+    setDeposite, setProcentEveryYar, setMonthlyIncome} = props
 
-const [charAfterDot, setCharAfterDot] = useState(0)
+  const [charAfterDot, setCharAfterDot] = useState(2)
 
-// EventListeners 
+  
+  // EventListeners 
   const depositIsChange = event => {
-    // let newDepositSize = +event.target.value 
-    console.log('depositeIsChange')
-    // if (!newDepositSize || Number.isNaN(newDepositSize))  {
-    //   newDepositSize = 0
-    // }
-    //     setDeposite(newDepositSize)
-    //     setMonthIncome(calculateProcentIncomeAfterMonth(procentEveryYear, newDepositSize))
-    //     setYearIncome(calculateProcentIncomeAfterYear(procentEveryYear, newDepositSize) )
+    let newDepositSize = +event.target.value 
+    if (!newDepositSize || Number.isNaN(newDepositSize))  {
+      newDepositSize = 0
+    }
+        setDeposite(+newDepositSize)
+       
       }
 
   const summAddEveryMonthIsChanged = event => {
-    console.log('add every month');
-    
-    // const monthlyPaid = +event.target.value 
-    // setAddEveryMoth(monthlyPaid)
-    // setMonthIncome(calculateProcentIncomeAfterMonth(procentEveryYear, deposite, monthlyPaid))
-    // setYearIncome(calculateProcentIncomeAfterYear(procentEveryYear, deposite, monthlyPaid) )
+    let monthlyPaid = +event.target.value 
+    if (!monthlyPaid || Number.isNaN(monthlyPaid))  {
+      monthlyPaid = 0
+    }
+    setMonthlyIncome(monthlyPaid)
   }
 
 
   const userDepositInfo = (
     <form className={'variables'}>
       <div className={'cell'}>
-        <ProcentForDeposite procentEveryYear={procentEveryYear} setProcentEveryYar={setProcentEveryYar} />
+        <ProcentForDeposite procentEveryYear={procentEveryYear} 
+                            setProcentEveryYar={setProcentEveryYar} 
+                            />
       </div>
       <div className={'cell'}>
         <TextField
@@ -65,7 +68,9 @@ const [charAfterDot, setCharAfterDot] = useState(0)
 
       <div className={'cell'}>
       <TextField
-            value={monthProfit}
+            value={
+              calculateProcentIncomeAfterMonth(procentEveryYear, deposite, monthlyIncome, charAfterDot)
+              }
             onChange={() => {console.log('Its proprepty calculate automatic')}} 
             label="% after a month"
             id="procentAfterMonth"
@@ -78,9 +83,11 @@ const [charAfterDot, setCharAfterDot] = useState(0)
 
       <div className={'cell'}>
       <TextField
-            value={yearProfit}
+            value={
+              calculateProcentIncomeAfterYear(procentEveryYear, deposite, monthlyIncome, charAfterDot)
+            }
             onChange={() => {console.log('Its proprepty calculate automatic')}} 
-            label="% after a month"
+            label="% after a year"
             id="procentAfterYear"
             color="secondary"
 
@@ -103,25 +110,25 @@ const [charAfterDot, setCharAfterDot] = useState(0)
       </div>
     </form>)
 
-  // const willBeMoneyOnAYear = calculateDepositeAfterSomeMonth(12, deposite, addEveryMonth)
-  //                                   .map( (sum, index) => {
-  //                                     return (
-  //                                       <div className={'calculateEachMonth'}>
-  //                                         <p> {index + 1} month -></p> 
-  //                                         <p className={'calculateDeposite'}>{sum}</p>
-  //                                       </div>
-  //                                     )})  ;
+  const willBeMoneyOnAYear = calculateDepositeAfterSomeMonth(12, deposite, monthlyIncome, procentEveryYear, charAfterDot )   
+                                    .map( (sum, index) => {
+                                      return (
+                                        <div className={'calculateEachMonth'}>
+                                          <p> {index + 1} month -></p> 
+                                          <p className={'calculateDeposite'}>{sum}</p>
+                                        </div>
+                                      )})  ;
     
-  //   const willBeMoneyOnLongTherm = calculateDepositeAfterSomeMonth(300)
-  //                                       .map( (summa, index) => {
-  //                                           if (index === 59 || index === 119 || index === 179 || index === 239 || index === 299) {
-  //                                             return <div className={'calculateEachYear'}>
-  //                                                       <p> { (index + 1) / 12} years -></p> 
-  //                                                       <p className={'calculateDeposite'}>{summa}</p>
-  //                                                     </div> 
-  //                                           }
-  //                                           return null
-  //                                         })
+  const willBeMoneyOnLongTherm = calculateDepositeAfterSomeMonth(300, deposite, monthlyIncome, procentEveryYear, charAfterDot)
+                                        .map( (summa, index) => {
+                                            if (index === 59 || index === 119 || index === 179 || index === 239 || index === 299) {
+                                              return <div className={'calculateEachYear'}>
+                                                        <p> { (index + 1) / 12} years -></p> 
+                                                        <p className={'calculateDeposite'}>{summa}</p>
+                                                      </div> 
+                                            }
+                                            return null
+                                          })
 
 
   return (
@@ -130,10 +137,10 @@ const [charAfterDot, setCharAfterDot] = useState(0)
       <div className={'container'}>
         {userDepositInfo}
         <div className={'willBe'}>
-          {/* {willBeMoneyOnAYear} */}
+          {willBeMoneyOnAYear}
         </div>
         <div className={'longThermPlans'}>
-          {/* {willBeMoneyOnLongTherm} */}
+          {willBeMoneyOnLongTherm}
         </div>
        
       </div> 

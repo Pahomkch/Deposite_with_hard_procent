@@ -6,12 +6,7 @@ import style from './App'
 export default function ProcentForDeposite({procentEveryYear, setProcentEveryYar}) {
 
   const updateCalculating = (e, value) => {
-    setProcentEveryYar(value)
-    
-    // const newProcentValue = (value/100).toFixed(3)
-    // setProcent(newProcentValue)
-    // setMonthIncome(calculateProcentIncomeAfterMonth( newProcentValue ))
-    // setYearIncome(calculateProcentIncomeAfterYear( newProcentValue ) )
+    setProcentEveryYar(value/100)
   }
 
   return (
